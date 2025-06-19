@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>科技加点模拟</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+	html {
+    font-size: 16px;
+	}
+    body {
+		font-family: Arial, sans-serif; 
+		color: #333; 
+		background-color: #f5f5f5; 
+		font-size: 1rem;
+	}
+	.container {
+		max-width: 1200px; 
+		margin: 0 auto; 
+		padding: 20px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.item {
+		flex-basis: calc(50% - 10px);
+	}
+	table {
+        margin-bottom: 10px;
+		width: 100%;
+		max-width: 100%;
+		table-layout: auto;
+	}
+	th {
+		background-color: #ddd; 
+		font-weight: bold;
+		padding: 8px;
+		font-size: 12px;
+	}
+	tr {
+		background-color: #FFDDDD;
+	}
+	tr:nth-child(odd) {
+		background-color: #FFFFFF;
+	}
+    td {
+        padding: 8px;
+        text-align: center;
+		font-size: 12px;
+    }
+	.btn-group {
+		margin-top: 8px; 
+	}
+	button {
+		background-color: #007bff;
+		color: white; 
+		border: none; 
+		border-radius: 4px; 
+		cursor: pointer; 
+		transition: background-color 0.3s ease; 
+	}
+	button:hover {
+		background-color: #0056b3; 
+	}
+	.myDiv {
+		height: 3px;
+		background-color: #e9ecef;
+		border-radius: 8px;
+	}
+	.half-width {
+		width: 50%;
+		box-sizing: border-box;
+		background-color: #fff;
+		float: left; 
+		border: 1px solid #ccc; 
+		min-width: 100px;
+	}
+	@media screen and (max-width: 768px) {
+		.half-width {
+			width: 100%;
+		}
+	}
+	html, body {
+		overflow: hidden;
+		height: 100%;
+	}
+    </style>
+</head>
+<body>
+<div style="max-width: 768px;margin: 0 auto;">
+	<div>
+	    <label for="input-value">输入科技点数：</label>
+	    <input type="number" id="input-value" value="0" max="9999999" style="min-width: 10px;" oninput="calculateTotalMultipliersSum()">
+	</div>
+	
+	<div id="result-display">剩余科技点数：-</div>
+	
+	<table>
+	    <tr>
+	        <td class="half-width"><button onclick="resetDataCells()">点击重置</button></td>
+	    </tr>
+	</table>
+	<strong></strong>
+	<div class="myDiv"></div>
+</div>
+<div style="height: 100%;overflow-y: auto;max-width: 768px;margin: 0 auto;">
+	
+	<table>
+	    <tr>
+			<th>武器强化</th>
+	        <th>等级</th>
+	        <th>升级</th>
+	    </tr>
+		
+	    <tr>
+			<td id="">主炮基础攻击</td>
+	        <td id="data-cellA1">0</td>
+	        <td class="btn-group">
+				<button onclick="incrementCell('data-cellA1', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA1', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA1', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA1', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA1', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+		<td id="">主炮攻击速度</td>
+	        <td id="data-cellA2">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA2', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA2', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA2', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA2', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA2', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">主炮暴击率</td>
+			<td id="data-cellA3">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA3', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA3', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA3', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA3', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA3', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">主炮暴击伤害</td>
+			<td id="data-cellA4">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA4', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA4', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA4', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA4', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA4', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">副炮基础攻击</td>
+			<td id="data-cellA5">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA5', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA5', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA5', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA5', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA5', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">副炮攻击速度</td>
+			<td id="data-cellA6">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA6', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA6', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA6', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA6', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA6', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">副炮暴击率</td>
+			<td id="data-cellA7">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA7', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA7', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA7', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA7', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA7', 100)">+100</button>
+	        </td>
+	    </tr>
+	    <tr>
+	        <td id="">副炮暴击伤害</td>
+			<td id="data-cellA8">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA8', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA8', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA8', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA8', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA8', 100)">+100</button>
+	        </td>
+	    </tr>
+	
+	    <tr>
+	        <td id="">导弹基础攻击</td>
+			<td id="data-cellA9">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA9', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA9', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA9', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA9', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA9', 100)">+100</button>
+	        </td>
+	    </tr>
+	
+	    <tr>
+	        <td id="">导弹攻击速度</td>
+			<td id="data-cellA10">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA10', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA10', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA10', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA10', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA10', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">导弹暴击率</td>
+			<td id="data-cellA11">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA11', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA11', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA11', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA11', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA11', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">导弹暴击伤害</td>
+			<td id="data-cellA12">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA12', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA12', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA12', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA12', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA12', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">装甲基础伤害</td>
+			<td id="data-cellA13">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA13', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA13', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA13', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA13', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA13', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">装甲基础生命</td>
+			<td id="data-cellA14">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA14', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA14', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA14', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA14', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA14', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">必杀基础攻击</td>
+			<td id="data-cellA15">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA15', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA15', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA15', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA15', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA15', 100)">+100</button>
+	        </td>
+	    </tr>
+		
+	    <tr>
+	        <td id="">必杀冷却时间</td>
+			<td id="data-cellA16">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellA16', 0)">0</button>
+	            <button onclick="incrementCell('data-cellA16', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellA16', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellA16', 10)">+10</button>
+				<button onclick="incrementCell('data-cellA16', 100)">+100</button>
+	        </td>
+	        </td>
+	    </tr>
+		
+		<tr>
+			<th>强化伤害</th>
+	        <th>等级</th>
+	        <th>升级</th>
+		</tr>
+		
+		<tr>
+			<td id="">对地/水增伤</td>
+	        <td id="data-cellB1">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellB1', 0)">0</button>
+	            <button onclick="incrementCell('data-cellB1', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellB1', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellB1', 10)">+10</button>
+				<button onclick="incrementCell('data-cellB1', 100)">+100</button>
+	        </td>	
+		</tr>
+		
+		<tr>
+			<td id="">对空增伤</td>
+	        <td id="data-cellB2">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellB2', 0)">0</button>
+	            <button onclick="incrementCell('data-cellB2', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellB2', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellB2', 10)">+10</button>
+				<button onclick="incrementCell('data-cellB2', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对普敌增伤</td>
+	        <td id="data-cellB3">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellB3', 0)">0</button>
+	            <button onclick="incrementCell('data-cellB3', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellB3', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellB3', 10)">+10</button>
+				<button onclick="incrementCell('data-cellB3', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对精英增伤</td>
+	        <td id="data-cellB4">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellB4', 0)">0</button>
+	            <button onclick="incrementCell('data-cellB4', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellB4', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellB4', 10)">+10</button>
+				<button onclick="incrementCell('data-cellB4', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对首领增伤</td>
+	        <td id="data-cellB5">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellB5', 0)">0</button>
+	            <button onclick="incrementCell('data-cellB5', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellB5', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellB5', 10)">+10</button>
+				<button onclick="incrementCell('data-cellB5', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+		    <th>削弱敌人</th>
+	        <th>等级</th>
+	        <th>升级</th>
+		</tr>
+		
+		<tr>
+			<td id="">对地/水减伤</td>
+	        <td id="data-cellC1">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellC1', 0)">0</button>
+	            <button onclick="incrementCell('data-cellC1', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellC1', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellC1', 10)">+10</button>
+				<button onclick="incrementCell('data-cellC1', 100)">+100</button>
+	        </td>
+		</tr>
+	
+		<tr>
+			<td id="">对空减伤</td>
+	        <td id="data-cellC2">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellC2', 0)">0</button>
+	            <button onclick="incrementCell('data-cellC2', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellC2', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellC2', 10)">+10</button>
+				<button onclick="incrementCell('data-cellC2', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对普敌减伤</td>
+	        <td id="data-cellC3">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellC3', 0)">0</button>
+	            <button onclick="incrementCell('data-cellC3', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellC3', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellC3', 10)">+10</button>
+				<button onclick="incrementCell('data-cellC3', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对精英减伤</td>
+	        <td id="data-cellC4">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellC4', 0)">0</button>
+	            <button onclick="incrementCell('data-cellC4', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellC4', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellC4', 10)">+10</button>
+				<button onclick="incrementCell('data-cellC4', 100)">+100</button>
+	        </td>
+		</tr>
+		
+		<tr>
+			<td id="">对首领减伤</td>
+	        <td id="data-cellC5">0</td>
+	        <td class="btn-group">
+	            <button onclick="incrementCell('data-cellC5', 0)">0</button>
+	            <button onclick="incrementCell('data-cellC5', 1)">+1</button>
+	            <button onclick="incrementCell('data-cellC5', 5)">+5</button>
+	            <button onclick="incrementCell('data-cellC5', 10)">+10</button>
+				<button onclick="incrementCell('data-cellC5', 100)">+100</button>
+	        </td>
+		</tr>
+	</table>
+	<div style="height:125px"></div>
+</div>
+
+
+
+<script>
+function incrementCell(cellId, value) {
+    var cell = document.getElementById(cellId);
+    var isAGroup = cellId.startsWith('data-cellA');
+    var isBGroup = cellId.startsWith('data-cellB');
+    var isCGroup = cellId.startsWith('data-cellC');
+    if (isAGroup || isBGroup || isCGroup) {
+        var currentValue = parseInt(cell.textContent || cell.innerText, 10);
+		if(value == 0){
+			cell.textContent = 0;
+		} else if (currentValue + value <= 100) {
+            cell.textContent = currentValue + value;
+        } else {
+            cell.textContent = 100;
+        }        
+        calculateTotalMultipliersSum();
+    }
+}
+
+function resetDataCells() {
+	var dataCells = document.querySelectorAll('td[id^="data-"]');
+	dataCells.forEach(function(cell) {
+		cell.innerText = '0'; 
+	});	
+    calculateTotalMultipliersSum();		
+}
+	
+const cellGroupsAndMultipliers = [
+  { 
+    ids: ['data-cellA1', 'data-cellA2', 'data-cellA3','data-cellA4', 'data-cellA5', 'data-cellA6', 'data-cellA7', 'data-cellA8', 'data-cellA9' , 'data-cellA10', 'data-cellA11', 'data-cellA12', 'data-cellA13', 'data-cellA14', 'data-cellA15', 'data-cellA16'], 
+    rules: [
+	  { value: 0, multiplier: 0 },
+      { value: 1, multiplier: 10 },
+      { value: 2, multiplier: 23 },
+      { value: 3, multiplier: 51 },
+	  { value: 4, multiplier: 83 },
+      { value: 5, multiplier: 134 },
+      { value: 6, multiplier: 189 },
+	  { value: 7, multiplier: 273 },
+      { value: 8, multiplier: 363 },
+      { value: 9, multiplier: 487 },
+	  { value: 10, multiplier: 619 },
+      { value: 11, multiplier: 757 },
+      { value: 12, multiplier: 935 },
+	  { value: 13, multiplier: 1121 },
+      { value: 14, multiplier: 1314 },
+      { value: 15, multiplier: 1513 },
+	  { value: 16, multiplier: 1757 },
+      { value: 17, multiplier: 2010 },
+      { value: 18, multiplier: 2270 },
+	  { value: 19, multiplier: 2580 },
+      { value: 20, multiplier: 3057 },
+      { value: 21, multiplier: 3547 },
+	  { value: 22, multiplier: 4048 },
+      { value: 23, multiplier: 4561 },
+      { value: 24, multiplier: 5087 },
+	  { value: 25, multiplier: 5696 },
+      { value: 26, multiplier: 6318 },
+      { value: 27, multiplier: 6954 },
+	  { value: 28, multiplier: 7600 },
+      { value: 29, multiplier: 8258 },
+      { value: 30, multiplier: 8928 },
+	  { value: 31, multiplier: 9612 },
+      { value: 32, multiplier: 10306 },
+      { value: 33, multiplier: 11011 },
+	  { value: 34, multiplier: 11728 },
+      { value: 35, multiplier: 12601 },
+      { value: 36, multiplier: 13487 },
+	  { value: 37, multiplier: 14387 },
+      { value: 38, multiplier: 15299 },
+      { value: 39, multiplier: 16223 },
+	  { value: 40, multiplier: 17159 },
+      { value: 41, multiplier: 18110 },
+      { value: 42, multiplier: 19073 },
+	  { value: 43, multiplier: 20046 },
+      { value: 44, multiplier: 21033 },
+      { value: 45, multiplier: 22030 },
+	  { value: 46, multiplier: 23039 },
+      { value: 47, multiplier: 24059 },
+      { value: 48, multiplier: 25091 },
+	  { value: 49, multiplier: 26135 },
+      { value: 50, multiplier: 27191 },
+      { value: 51, multiplier: 28257 },
+	  { value: 52, multiplier: 29334 },
+      { value: 53, multiplier: 30421 },
+      { value: 54, multiplier: 31519 },
+	  { value: 55, multiplier: 32629 },
+      { value: 56, multiplier: 33749 },
+      { value: 57, multiplier: 34880 },
+	  { value: 58, multiplier: 36021 },
+      { value: 59, multiplier: 37173 },
+      { value: 60, multiplier: 38335 },
+	  { value: 61, multiplier: 39508 },
+      { value: 62, multiplier: 40690 },
+      { value: 63, multiplier: 41882 },
+	  { value: 64, multiplier: 43085 },
+      { value: 65, multiplier: 44298 },
+      { value: 66, multiplier: 45520 },
+	  { value: 67, multiplier: 46753 },
+      { value: 68, multiplier: 47995 },
+      { value: 69, multiplier: 49247 },
+	  { value: 70, multiplier: 50508 },
+      { value: 71, multiplier: 51780 },
+      { value: 72, multiplier: 53061 },
+	  { value: 73, multiplier: 54351 },
+      { value: 74, multiplier: 55650 },
+      { value: 75, multiplier: 56959 },
+	  { value: 76, multiplier: 58277 },
+      { value: 77, multiplier: 59604 },
+      { value: 78, multiplier: 60940 },
+	  { value: 79, multiplier: 62285 },
+      { value: 80, multiplier: 63639 },
+      { value: 81, multiplier: 65004 },
+	  { value: 82, multiplier: 66376 },
+      { value: 83, multiplier: 67757 },
+      { value: 84, multiplier: 69147 },
+	  { value: 85, multiplier: 70546 },
+      { value: 86, multiplier: 71954 },
+      { value: 87, multiplier: 73371 },
+	  { value: 88, multiplier: 74796 },
+      { value: 89, multiplier: 76230 },
+      { value: 90, multiplier: 77673 },
+	  { value: 91, multiplier: 79125 },
+      { value: 92, multiplier: 80584 },
+      { value: 93, multiplier: 82052 },
+	  { value: 94, multiplier: 83528 },
+      { value: 95, multiplier: 85013 },
+      { value: 96, multiplier: 86507 },
+	  { value: 97, multiplier: 88007 },
+      { value: 98, multiplier: 89507 },
+	  { value: 99, multiplier: 91007 },
+      { value: 100, multiplier: 92507 }
+    ]
+  },
+  { 
+    ids: ['data-cellB1', 'data-cellB2', 'data-cellB3', 'data-cellB4', 'data-cellB5'], 
+     rules: [
+	  { value: 0, multiplier: 0*3 },
+      { value: 1, multiplier: 10*3 },
+      { value: 2, multiplier: 23*3 },
+      { value: 3, multiplier: 51*3 },
+	  { value: 4, multiplier: 83*3 },
+      { value: 5, multiplier: 134*3 },
+      { value: 6, multiplier: 189*3 },
+	  { value: 7, multiplier: 273*3 },
+      { value: 8, multiplier: 363*3 },
+      { value: 9, multiplier: 487*3 },
+	  { value: 10, multiplier: 619*3 },
+      { value: 11, multiplier: 757*3 },
+      { value: 12, multiplier: 935*3 },
+	  { value: 13, multiplier: 1121*3 },
+      { value: 14, multiplier: 1314*3 },
+      { value: 15, multiplier: 1513*3 },
+	  { value: 16, multiplier: 1757*3 },
+      { value: 17, multiplier: 2010*3 },
+      { value: 18, multiplier: 2270*3 },
+	  { value: 19, multiplier: 2580*3 },
+      { value: 20, multiplier: 3057*3 },
+      { value: 21, multiplier: 3547*3 },
+	  { value: 22, multiplier: 4048*3 },
+      { value: 23, multiplier: 4561*3 },
+      { value: 24, multiplier: 5087*3 },
+	  { value: 25, multiplier: 5696*3 },
+      { value: 26, multiplier: 6318*3 },
+      { value: 27, multiplier: 6954*3 },
+	  { value: 28, multiplier: 7600*3 },
+      { value: 29, multiplier: 8258*3 },
+      { value: 30, multiplier: 8928*3 },
+	  { value: 31, multiplier: 9612*3 },
+      { value: 32, multiplier: 10306*3 },
+      { value: 33, multiplier: 11011*3 },
+	  { value: 34, multiplier: 11728*3 },
+      { value: 35, multiplier: 12601*3 },
+      { value: 36, multiplier: 13487*3 },
+	  { value: 37, multiplier: 14387*3 },
+      { value: 38, multiplier: 15299*3 },
+      { value: 39, multiplier: 16223*3 },
+	  { value: 40, multiplier: 17159*3 },
+      { value: 41, multiplier: 18110*3 },
+      { value: 42, multiplier: 19073*3 },
+	  { value: 43, multiplier: 20046*3 },
+      { value: 44, multiplier: 21033*3 },
+      { value: 45, multiplier: 22030*3 },
+	  { value: 46, multiplier: 23039*3 },
+      { value: 47, multiplier: 24059*3 },
+      { value: 48, multiplier: 25091*3 },
+	  { value: 49, multiplier: 26135*3 },
+      { value: 50, multiplier: 27191*3 },
+      { value: 51, multiplier: 28257*3 },
+	  { value: 52, multiplier: 29334*3 },
+      { value: 53, multiplier: 30421*3 },
+      { value: 54, multiplier: 31519*3 },
+	  { value: 55, multiplier: 32629*3 },
+      { value: 56, multiplier: 33749*3 },
+      { value: 57, multiplier: 34880*3 },
+	  { value: 58, multiplier: 36021*3 },
+      { value: 59, multiplier: 37173*3 },
+      { value: 60, multiplier: 38335*3 },
+	  { value: 61, multiplier: 39508*3 },
+      { value: 62, multiplier: 40690*3 },
+      { value: 63, multiplier: 41882*3 },
+	  { value: 64, multiplier: 43085*3 },
+      { value: 65, multiplier: 44298*3 },
+      { value: 66, multiplier: 45520*3 },
+	  { value: 67, multiplier: 46753*3 },
+      { value: 68, multiplier: 47995*3 },
+      { value: 69, multiplier: 49247*3 },
+	  { value: 70, multiplier: 50508*3 },
+      { value: 71, multiplier: 51780*3 },
+      { value: 72, multiplier: 53061*3 },
+	  { value: 73, multiplier: 54351*3 },
+      { value: 74, multiplier: 55650*3 },
+      { value: 75, multiplier: 56959*3 },
+	  { value: 76, multiplier: 58277*3 },
+      { value: 77, multiplier: 59604*3 },
+      { value: 78, multiplier: 60940*3 },
+	  { value: 79, multiplier: 62285*3 },
+      { value: 80, multiplier: 63639*3 },
+      { value: 81, multiplier: 65004*3 },
+	  { value: 82, multiplier: 66376*3 },
+      { value: 83, multiplier: 67757*3 },
+      { value: 84, multiplier: 69147*3 },
+	  { value: 85, multiplier: 70546*3 },
+      { value: 86, multiplier: 71954*3 },
+      { value: 87, multiplier: 73371*3 },
+	  { value: 88, multiplier: 74796*3 },
+      { value: 89, multiplier: 76230*3 },
+      { value: 90, multiplier: 77673*3 },
+	  { value: 91, multiplier: 79125*3 },
+      { value: 92, multiplier: 80584*3 },
+      { value: 93, multiplier: 82052*3 },
+	  { value: 94, multiplier: 83528*3 },
+      { value: 95, multiplier: 85013*3 },
+      { value: 96, multiplier: 86507*3 },
+	  { value: 97, multiplier: 88007*3 },
+      { value: 98, multiplier: 89507*3 },
+	  { value: 99, multiplier: 91007*3 },
+      { value: 100, multiplier: 92507*3 }
+    ]
+  },
+  { 
+    ids: ['data-cellC1', 'data-cellC2', 'data-cellC3', 'data-cellC4', 'data-cellC5'], 
+     rules: [
+	  { value: 0, multiplier: 0*4 },
+      { value: 1, multiplier: 10*4 },
+      { value: 2, multiplier: 23*4 },
+      { value: 3, multiplier: 51*4 },
+	  { value: 4, multiplier: 83*4 },
+      { value: 5, multiplier: 134*4 },
+      { value: 6, multiplier: 189*4 },
+	  { value: 7, multiplier: 273*4 },
+      { value: 8, multiplier: 363*4 },
+      { value: 9, multiplier: 487*4 },
+	  { value: 10, multiplier: 619*4 },
+      { value: 11, multiplier: 757*4 },
+      { value: 12, multiplier: 935*4 },
+	  { value: 13, multiplier: 1121*4 },
+      { value: 14, multiplier: 1314*4 },
+      { value: 15, multiplier: 1513*4 },
+	  { value: 16, multiplier: 1757*4 },
+      { value: 17, multiplier: 2010*4 },
+      { value: 18, multiplier: 2270*4 },
+	  { value: 19, multiplier: 2580*4 },
+      { value: 20, multiplier: 3057*4 },
+      { value: 21, multiplier: 3547*4 },
+	  { value: 22, multiplier: 4048*4 },
+      { value: 23, multiplier: 4561*4 },
+      { value: 24, multiplier: 5087*4 },
+	  { value: 25, multiplier: 5696*4 },
+      { value: 26, multiplier: 6318*4 },
+      { value: 27, multiplier: 6954*4 },
+	  { value: 28, multiplier: 7600*4 },
+      { value: 29, multiplier: 8258*4 },
+      { value: 30, multiplier: 8928*4 },
+	  { value: 31, multiplier: 9612*4 },
+      { value: 32, multiplier: 10306*4 },
+      { value: 33, multiplier: 11011*4 },
+	  { value: 34, multiplier: 11728*4 },
+      { value: 35, multiplier: 12601*4 },
+      { value: 36, multiplier: 13487*4 },
+	  { value: 37, multiplier: 14387*4 },
+      { value: 38, multiplier: 15299*4 },
+      { value: 39, multiplier: 16223*4 },
+	  { value: 40, multiplier: 17159*4 },
+      { value: 41, multiplier: 18110*4 },
+      { value: 42, multiplier: 19073*4 },
+	  { value: 43, multiplier: 20046*4 },
+      { value: 44, multiplier: 21033*4 },
+      { value: 45, multiplier: 22030*4 },
+	  { value: 46, multiplier: 23039*4 },
+      { value: 47, multiplier: 24059*4 },
+      { value: 48, multiplier: 25091*4 },
+	  { value: 49, multiplier: 26135*4 },
+      { value: 50, multiplier: 27191*4 },
+      { value: 51, multiplier: 28257*4 },
+	  { value: 52, multiplier: 29334*4 },
+      { value: 53, multiplier: 30421*4 },
+      { value: 54, multiplier: 31519*4 },
+	  { value: 55, multiplier: 32629*4 },
+      { value: 56, multiplier: 33749*4 },
+      { value: 57, multiplier: 34880*4 },
+	  { value: 58, multiplier: 36021*4 },
+      { value: 59, multiplier: 37173*4 },
+      { value: 60, multiplier: 38335*4 },
+	  { value: 61, multiplier: 39508*4 },
+      { value: 62, multiplier: 40690*4 },
+      { value: 63, multiplier: 41882*4 },
+	  { value: 64, multiplier: 43085*4 },
+      { value: 65, multiplier: 44298*4 },
+      { value: 66, multiplier: 45520*4 },
+	  { value: 67, multiplier: 46753*4 },
+      { value: 68, multiplier: 47995*4 },
+      { value: 69, multiplier: 49247*4 },
+	  { value: 70, multiplier: 50508*4 },
+      { value: 71, multiplier: 51780*4 },
+      { value: 72, multiplier: 53061*4 },
+	  { value: 73, multiplier: 54351*4 },
+      { value: 74, multiplier: 55650*4 },
+      { value: 75, multiplier: 56959*4 },
+	  { value: 76, multiplier: 58277*4 },
+      { value: 77, multiplier: 59604*4 },
+      { value: 78, multiplier: 60940*4 },
+	  { value: 79, multiplier: 62285*4 },
+      { value: 80, multiplier: 63639*4 },
+      { value: 81, multiplier: 65004*4 },
+	  { value: 82, multiplier: 66376*4 },
+      { value: 83, multiplier: 67757*4 },
+      { value: 84, multiplier: 69147*4 },
+	  { value: 85, multiplier: 70546*4 },
+      { value: 86, multiplier: 71954*4 },
+      { value: 87, multiplier: 73371*4 },
+	  { value: 88, multiplier: 74796*4 },
+      { value: 89, multiplier: 76230*4 },
+      { value: 90, multiplier: 77673*4 },
+	  { value: 91, multiplier: 79125*4 },
+      { value: 92, multiplier: 80584*4 },
+      { value: 93, multiplier: 82052*4 },
+	  { value: 94, multiplier: 83528*4 },
+      { value: 95, multiplier: 85013*4 },
+      { value: 96, multiplier: 86507*4 },
+	  { value: 97, multiplier: 88007*4 },
+      { value: 98, multiplier: 89507*4 },
+	  { value: 99, multiplier: 91007*4 },
+      { value: 100, multiplier: 92507*4 }
+    ]
+  },
+];
+
+
+function getMultiplierFromRules(cellValue, rules) {
+    for (const rule of rules) {
+        if (rule.value === cellValue) {
+            return rule.multiplier;
+        }
+    }
+    return 1; 
+}
+
+function calculateTotalMultipliersSum() {
+    let totalMultipliersSum = 0;
+    cellGroupsAndMultipliers.forEach((group, index) => {
+        group.ids.forEach(id => {
+            const cell = document.getElementById(id);
+            let multiplier;
+
+            if (group.rules) {
+                const cellValue = parseInt(cell.innerText, 10);
+                const matchingRule = group.rules.find(rule => rule.value === cellValue);
+                if (matchingRule) {
+                    multiplier = matchingRule.multiplier;
+                } else {
+                    multiplier = 1; 
+                }
+            } 
+
+            totalMultipliersSum += multiplier;
+        });
+    });
+	
+	const inputValue = parseInt(document.getElementById('input-value').value, 10);
+    const maxValue = parseInt(document.getElementById('input-value').max, 10);	
+
+    if (isNaN(inputValue) || inputValue < 0) {
+        document.getElementById('result-display').innerText = '剩余科技点数：无效值';
+        document.getElementById('input-value').value = "" ;
+        return;
+    }
+
+    if (inputValue > maxValue) {
+        alert('输入的科技点数超过了最大限制（1000点）！');
+        document.getElementById('input-value').value = maxValue;
+    }
+	
+	
+	const difference = inputValue - totalMultipliersSum ;
+    document.getElementById('result-display').innerText = '剩余科技点数：' + difference;
+}
+
+calculateTotalMultipliersSum();
+
+</script>
+
+</body>
+</html>
